@@ -1,17 +1,16 @@
 const express = require('express')
+const mysqllib = require('./db_connection')
 const app = express()
 const port = 3000
+// require routes related to categories
+require('./routes/categories')(app);
 // Connect to the database
-const client = require('./db_connection').connectToDb();
-client.connect().then(() => {
-    console.log('Connected to database!')
-}).catch(e => {
-    console.log('Error connecting to database', e);
-})
-app.get('/', (req, res) => {
-    res.send('Hello World!')
-})
 
-app.listen(port, () => {
-    console.log(`Example app listening at http://localhost:${port}`)
+mysqllib.connect().then(() => {
+    app.listen(port, () => {
+        console.log(`Example app listening at http://localhost:${port}`)
+    })
+}).catch(err => {
+    console.log('connection error');
+    console.log(err);
 })

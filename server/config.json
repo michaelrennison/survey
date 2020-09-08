@@ -1,4 +1,6 @@
 {
-  "dbpass": "ZroEWCU8QoioquVi",
-  "dbname": "survey_db"
+  "dbhost": "localhost",
+  "dbuser": "root",
+  "dbpass": "",
+  "dbname": "survey"
 }
