@@ -1,4 +1,3 @@
-import Question from './question';
 const mongoose = require('mongoose')
 
 /**
@@ -10,4 +9,4 @@ var siteOptionsSchema = new mongoose.Schema({
     value: String,
 });
 
-module.exports = mongoose.model('Category', siteOptionsSchema)
+module.exports = mongoose.model('SiteOptions', siteOptionsSchema)
