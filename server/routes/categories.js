@@ -36,4 +36,25 @@ module.exports = function(app) {
             res.status(200).send(category);
         }
     });
+
+    // function for getting the details for a single category
+    // route function for getting a single categories questions
+    app.get('/category/:id', async function(req, res) {
+        // get the category id from the url
+        const categoryId = req.params.id;
+        // define the query to execute
+        const query = `SELECT * FROM categories WHERE id='${categoryId}'`
+        // execute the query for getting all of the questions
+        const category = await mysql.executeQuery(query).then((d) => {
+            return d[0];
+        }).catch(e => {
+            return e
+        });
+
+        if(category instanceof Error) {
+            res.status(500).send(category);
+        } else {
+            res.status(200).send(category);
+        }
+    });
 }

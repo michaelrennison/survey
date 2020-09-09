@@ -19,11 +19,12 @@ class Survey extends Component {
     }
     render() {
         return (
-            <React.Fragment>
-                <h1>{this.state.title}</h1>
-                <p>{this.state.description}</p>
+            <div className="p-5">
+                <img src="./assets/image.png" />
+                <h5 className="text-center font-weight-bold">{this.state.title}</h5>
+                <p className="text-center">{this.state.description}</p>
                 {this.hasCategories()}
-            </React.Fragment>
+            </div>
         );
     }
 
@@ -44,6 +45,7 @@ class Survey extends Component {
             });
             // return the categories
             this.setState({categories: categories});
+
         }).catch(e => {
 
         })
@@ -52,7 +54,7 @@ class Survey extends Component {
     // Function to determine if the categories have loaded or not so the app can display the next button
     hasCategories() {
         if(this.state.categories.length > 0) {
-            return <Link to={`categories/${this.getFirstCategoryId()}`} category={this.state.categories[0]} className="btn btn-primary">{this.state.buttonText}</Link>
+            return <Link to={`categories/${this.getFirstCategoryId()}`} className="btn btn-primary btn-block">{this.state.buttonText}</Link>
         }
     }
     // return the id of the first category in the categories list

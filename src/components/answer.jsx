@@ -4,12 +4,15 @@ class Answer extends Component {
     state = {}
 
     render() {
-        if(this.props.answer.selected) {
-
-        }
         return (
-            <div className="card" style={this.props.answer.selected ? { background: 'red' } : {background: 'inherit'}} key={this.props.answer.id}>{ this.props.answer.title }</div>
+            <div className="col-6 p-1">
+                <div onClick={this.toggleAnswer.bind(this)} className="card text-center py-2 justify-content-center align-items-stretch" style={this.props.answer.selected ? { background: this.props.category.themeColour, color: 'white' } : {background: 'inherit'}} key={this.props.answer.id}>{ this.props.answer.title }</div>
+            </div>
         );
+    }
+
+    toggleAnswer() {
+        this.props.handler(this.props.answer.id, !this.props.answer.selected);
     }
 }
 
