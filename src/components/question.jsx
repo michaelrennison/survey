@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import AnswerModel from "../models/answer";
 import CategoryModel from "../models/category";
 class Question extends Component {
+    /*
     state = {
         category: CategoryModel,
         title: 'Question 1',
@@ -15,17 +16,11 @@ class Question extends Component {
     }
 
     renderAnswers() {
-        if (this.state.answers.length === 0) return <p>This question does not have any answers</p>
-        return <ul>{ this.state.answers.map( answer => <li key={answer.id}>{ answer.title }</li>) }</ul>
     }
 
     render() {
         return (
-            <React.Fragment>
-                <h1>{ this.state.title }</h1>
-                {this.renderAnswers()}
-                <button className="btn btn-primary">Next question</button>
-            </React.Fragment>
+            <div></div>
         )
 
     }
@@ -49,6 +44,7 @@ class Question extends Component {
             '#FF4136'
         );
     }
+    */
 }
 
 export default Question;

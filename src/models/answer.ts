@@ -8,12 +8,13 @@ class AnswerModel {
     protected title: String;
     protected value: Number;
     private questionId: Number;
-
+    public selected: Boolean
     constructor(title: String, value: Number, questionId: Number, id: Number) {
         this.title = title;
         this.value = value;
         this.questionId = questionId;
         this.id = id;
+        this.selected = false;
     }
 }
 

@@ -5,11 +5,10 @@ import App from './App';
 import * as serviceWorker from './serviceWorker';
 import 'bootstrap/dist/css/bootstrap.css';
 import Survey from "./components/survey";
-import Question from "./components/question";
 
 ReactDOM.render(
   <React.StrictMode>
-    <Question />
+    <App />
   </React.StrictMode>,
   document.getElementById('root')
 );
