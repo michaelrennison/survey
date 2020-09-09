@@ -4,14 +4,16 @@
  * when the answer is submitted, and a question id that represents which question the answer belongs to
  */
 class AnswerModel {
+    private id: Number;
     protected title: String;
     protected value: Number;
     private questionId: Number;
 
-    constructor(title: String, value: Number, questionId: Number) {
+    constructor(title: String, value: Number, questionId: Number, id: Number) {
         this.title = title;
         this.value = value;
         this.questionId = questionId;
+        this.id = id;
     }
 }
 
