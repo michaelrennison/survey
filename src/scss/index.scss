@@ -1,7 +1,38 @@
 @import "variables";
-
-.card {
-  min-height: 80px;
-}
 @import '~bootstrap/scss/bootstrap';
 
+body {
+  background-color: #f8f8f8;
+}
+.card {
+  min-height: 90px;
+  background-color: white;
+  cursor: pointer;
+  border-radius: 10px;
+}
+
+.progress {
+  border-radius: 0;
+  height: 0.8rem;
+  background: #dbdbdb;
+}
+
+.category-title {
+  color: #a7a9b1;
+  font-size: 12px;
+}
+
+.btn {
+  border-radius: 0;
+  font-weight: bold;
+  font-size: 13px;
+}
+
+.result-bar {
+  background: white;
+  border-radius: 10px;
+  .progress {
+    border-radius: 10px;
+    height: 2rem;
+  }
+}

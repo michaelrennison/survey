@@ -10,6 +10,7 @@ import {
 import Survey from "./components/survey";
 import Category from "./components/category";
 import Result from "./components/result";
+import ThankYou from "./components/thankyou";
 
 function App() {
   return (
@@ -20,6 +21,8 @@ function App() {
           <Route path="/categories/:categoryId" component={Category}>
           </Route>
           <Route path="/results/:categoryId" component={Result}>
+          </Route>
+          <Route path="/thanks" component={ThankYou}>
           </Route>
         </Switch>
       </Router>

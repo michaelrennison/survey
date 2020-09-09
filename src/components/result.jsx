@@ -2,19 +2,22 @@ import React, {Component} from "react";
 import ProgressBar from "react-bootstrap/ProgressBar";
 import axios from "axios";
 import CategoryModel from "../models/category";
+import {Link} from "react-router-dom";
 
 const config = require('../config.json');
 
 class Result extends Component {
     state = {
         loaded: false,
-        category: null
+        category: null,
+        nextCategory: null,
+        linkTarget: null,
+        endSurvey: false
     }
 
     constructor(props) {
         super(props);
-        console.log(this.props);
-        this.state.id = this.props.match.params.categoryId
+        this.state.id = this.props.categoryId
         this.getCategory()
     }
 
@@ -28,14 +31,15 @@ class Result extends Component {
 
     getCategory() {
         axios.get(`${config.server}/category/${this.state.id}`).then((resp) => {
-            console.log(resp);
             const category = new CategoryModel(
                 resp.data.name,
                 resp.data.theme_colour,
-                resp.data.id
+                resp.data.id,
+                resp.data.average
             );
 
             this.setState({category: category, loaded: true});
+            this.getNextCategory();
         });
     }
 
@@ -50,25 +54,79 @@ class Result extends Component {
                 <div className="p-5 text-center">
                     <div className="mb-3">
                         <span className="font-weight-bold">UK national average: </span>
-                        <span>2.2 Tons of CO2 produced per year</span>
+                        <span>{this.state.category.average} Tons of CO2 produced per year</span>
                     </div>
-                    <div className="mb-3">
+                    <div className="mb-3 result-bar shadow p-2">
                         <style dangerouslySetInnerHTML={{__html: styleHtml}} />
-
-                        <ProgressBar now={50} />
+                        <ProgressBar  now={this.getUserAgainstAverage()} />
                     </div>
                     <div className="mb-3">
-                        <span className="font-weight-bold">You're using 3.2 Tons of CO2 / year</span>
+                        <span className="font-weight-bold">You're using { this.props.total } Tons of CO2 / year</span>
                     </div>
                 </div>
-                <div className="text-center p-5">
-                    <p className="font-weight-bold">Lets see how you do in the <span>Home</span> category...</p>
-                    <button className="btn-primary btn btn-block">Continue</button>
-                </div>
+                {this.displayNextCategory()}
             </React.Fragment>;
         } else {
             return <p>Loading...</p>
         }
+    }
+
+    /**
+     * Set the average as 50%, 100% will be double the average and then check where the user
+     * fits within that scale, if the user is over
+     */
+    getUserAgainstAverage() {
+        const max = this.state.category.average * 2;
+        return (this.props.total / max) * 100;
+    }
+
+    getNextCategory() {
+        axios.get(`${config.server}/next-category/${this.state.id}`).then((resp) => {
+            if(resp.data) {
+                const category = new CategoryModel(
+                    resp.data.name,
+                    resp.data.theme_colour,
+                    resp.data.id,
+                    resp.data.average
+                );
+                this.setState({nextCategory: category});
+            } else {
+                this.setState({endSurvey: true});
+            }
+        });
+    }
+
+    displayNextCategory() {
+        if(this.state.endSurvey) {
+            return <div className="text-center p-5">
+                <Link to='../thanks' className="btn-primary btn btn-block">Complete</Link>
+            </div>;
+        }
+        else if(this.state.nextCategory !== null) {
+            const linkTarget = {
+                pathname: `../categories/${this.state.nextCategory.id}`,
+                key: this.uuid(),
+                state: {
+                    applied: true
+                }
+            };
+            return <div className="text-center p-5">
+                <p className="font-weight-bold">Lets see how you do in the <span className="font-weight-bold" style={{ color: this.state.nextCategory.themeColour}}>{this.state.nextCategory.name}</span> category...</p>
+                <Link onClick={this.handleChange} to={linkTarget} className="btn-primary btn btn-block">Continue</Link>
+            </div>;
+        } else {
+            return <p>Loading...</p>
+        }
+    }
+
+    handleChange = () => {
+        this.props.handler(this.state.nextCategory.id)
+    }
+    uuid() {
+        return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+            var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+            return v.toString(16);
+        });
     }
 }
 

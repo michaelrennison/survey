@@ -6,49 +6,90 @@ import AnswerModel from "../models/answer";
 import Answer from "./answer";
 import CategoryProgress from "./categoryProgress";
 import { Router, Link } from "react-router-dom";
+import Result from "./result";
 
 const config = require('../config.json');
 class Category extends Component {
-    state = {
-        questions: [],
-        id: null,
-        activeQuestion: null,
-        lastQuestion: false,
-        categories: [],
-        progress: 0,
-        activeCategory: null,
-        answerSelected: false,
-    }
+
 
     progressBars = []
 
     constructor(props) {
         super(props);
+        this.state = {
+            questions: [],
+            id: null,
+            activeQuestion: null,
+            lastQuestion: false,
+            categories: null,
+            progress: 0,
+            total: 0,
+            activeCategory: null,
+            answerSelected: false,
+            showResults: false,
+        }
+        this.handler = this.handler.bind(this)
+        this.state.id = this.props.match.params.categoryId;
+        this.initialize()
+    }
+
+    handler(categoryId) {
+        this.state.id = categoryId;
+        this.updateActiveCategory();
+        this.initialize()
+    }
+
+    initialize() {
         this.answerSelectionHandler = this.answerSelectionHandler.bind(this);
-        const id = this.props.match.params.categoryId
-        this.getAllCategories();
+        this.state.showResults = false;
+        const path = this.props.location.pathname;
+        // get id from the url
+        if(!this.state.categories) {
+            this.getAllCategories();
+        }
         // get the category id from the props
-        this.state.id = id;
         // get the questions related to this category
         this.getQuestions();
     }
 
     changeProgress() {
-        const index = this.state.questions.indexOf(this.state.activeQuestion);
-        const progress = ((index + 1) / this.state.questions.length) * 100;
+        const index = this.state.questions.indexOf(this.state.activeQuestion) + 1;
+        const progress = ((index) / this.state.questions.length) * 100;
         this.setState({progress: progress});
-        this.progressBars[1].updateState(progress)
+        this.state.categories[this.state.activeCategory.id - 1].progress = progress;
+        this.progressBars[this.state.activeCategory.id].updateState(progress)
     }
 
     render() {
-        return <div className="p-5">
-            <div className="row">
-                {this.state.categories.map( cat => <CategoryProgress ref={(ip) => {this.progressBars[cat.id] = ip}} active={this.state.id} category={cat} changeProgress={this.changeProgress} />)}
+        if(this.state.showResults === false) {
+            console.log(this.state.categories)
+            return <div className="p-5">
+                {this.checkForCategories()}
+                {this.displayActiveQuestion()}
             </div>
-            {this.displayActiveQuestion()}
-        </div>
+        } else {
+            return <Result handler = { this.handler } total={this.state.total} categoryId={this.state.id} />
+        }
     }
 
+    checkForCategories() {
+        if(this.state.categories) {
+            return <div className="container">
+                <div className="row px-4">
+                    {this.state.categories.map( cat => <CategoryProgress ref={(ip) => {this.progressBars[cat.id] = ip}} active={this.state.id} category={cat} changeProgress={this.changeProgress} />)}
+                </div>
+            </div>;
+        }
+    }
+
+    handleCategoryChange() {
+        // Call the function to reset category, can't be done here as this is binded to the result component
+        this.resetCategory()
+    }
+
+    resetCategory() {
+        this.initialize()
+    }
     getQuestions() {
         // get questions from the backend using the category id
         axios.get(`${config.server}/categories/${this.state.id}`).then(resp => {
@@ -99,7 +140,6 @@ class Category extends Component {
     getActiveQuestionAnswers() {
         // get answers for the active question from the backend
         axios.get(`${config.server}/questions/${this.state.activeQuestion.id}`).then(resp => {
-            console.log(resp);
             // define an empty array to hold the answers
             const answers = [];
             // Loop through the response and create a new question object for it
@@ -120,8 +160,6 @@ class Category extends Component {
     }
 
     displayActiveQuestionAnswers() {
-        console.log('active category');
-        console.log(this.state.activeCategory);
         if (this.state.activeQuestion.answers.length === 0) return <p>This question does not have any answers</p>
         return <div className="container-fluid">
             <div className="row">
@@ -131,6 +169,12 @@ class Category extends Component {
     }
 
     nextQuestion = () => {
+        // add the value of the selected answer to the total
+        for(let i = 0; i < this.state.activeQuestion.answers.length; i++) {
+            if(this.state.activeQuestion.answers[i].selected) {
+                this.state.total += this.state.activeQuestion.answers[i].value;
+            }
+        }
         this.setState({answerSelected: false})
         // Check the index of the current active question
         const index = this.state.questions.indexOf(this.state.activeQuestion);
@@ -141,12 +185,13 @@ class Category extends Component {
             this.setState({activeQuestion: question})
             this.getActiveQuestionAnswers();
 
-            // check if the next question is the last, if so set the boolean for it
-            if (index === this.state.questions.length - 2){
+            this.changeProgress()
+            if(index === this.state.questions.length - 2) {
                 this.state.lastQuestion = true;
             }
-
-            this.changeProgress()
+        } else {
+            this.state.categories[this.state.activeCategory.id - 1].progress = 100;
+            this.setState({showResults: true});
         }
 
     }
@@ -169,16 +214,7 @@ class Category extends Component {
     }
 
     getNextButton() {
-        if(this.state.lastQuestion) {
-            if(this.state.answerSelected) {
-                return <Link to={ '../results/' + this.state.id } className="btn btn-primary btn-block mt-3">Results</Link>;
-            } else {
-                return <button disabled={true} className="btn btn-primary btn-block mt-3">Results</button>;
-            }
-
-        } else {
-            return <button disabled={!this.state.answerSelected} onClick={this.nextQuestion.bind(this)} className="btn btn-primary btn-block mt-3">Next question</button>;
-        }
+        return <button disabled={!this.state.answerSelected} onClick={this.nextQuestion.bind(this)} className="btn btn-primary btn-block mt-3">{ this.state.lastQuestion ? 'Results' : 'Next Question' }</button>;
     }
 
     getAllCategories() {
@@ -202,6 +238,14 @@ class Category extends Component {
             });
             // return the categories
             this.setState({categories: categories});
+        });
+    }
+
+    updateActiveCategory() {
+        this.state.categories.forEach((item, index) => {
+            if(item.id == this.state.id) {
+                this.setState({activeCategory: item});
+            }
         });
     }
 }

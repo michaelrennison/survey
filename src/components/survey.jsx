@@ -38,7 +38,8 @@ class Survey extends Component {
                 const category = new CategoryModel(
                     item.name,
                     item.theme_colour,
-                    item.id
+                    item.id,
+                    item.average
                 );
 
                 categories.push(category);
