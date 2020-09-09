@@ -3,8 +3,16 @@
  * displayed to the user, a value that represents the answer that will be used in the calculations
  * when the answer is submitted, and a question id that represents which question the answer belongs to
  */
-class Answer {
+class AnswerModel {
     protected title: String;
     protected value: Number;
     private questionId: Number;
+
+    constructor(title: String, value: Number, questionId: Number) {
+        this.title = title;
+        this.value = value;
+        this.questionId = questionId;
+    }
 }
+
+export default AnswerModel;

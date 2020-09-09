@@ -4,7 +4,14 @@
  * represents the category that the question belongs to
  */
 
-class Question {
+class QuestionModel {
     protected title: String;
     private categoryId: Number;
+
+    constructor(title: String, categoryId: Number) {
+        this.title = title;
+        this.categoryId = categoryId;
+    }
 }
+
+export default QuestionModel

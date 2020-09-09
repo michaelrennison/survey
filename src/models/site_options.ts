@@ -5,4 +5,11 @@
 class SiteOptions {
     protected key: String;
     public value: String;
+
+    constructor(key: String, value: String) {
+        this.key = key;
+        this.value = value;
+    }
 }
+
+export default SiteOptions
