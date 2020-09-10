@@ -1,4 +1,4 @@
-#Survey react app with express js backend
+##Survey react app with express js backend
 
 How to use:
 1. import the database.sql in server/database/ to your local database driver
