@@ -65,7 +65,6 @@ class Category extends Component {
 
     render() {
         if(this.state.showResults === false) {
-            console.log(this.state.categories)
             return <div className="p-5">
                 {this.checkForCategories()}
                 {this.checkForQuestionCount()}
