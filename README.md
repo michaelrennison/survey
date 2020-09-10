@@ -3,9 +3,10 @@
 How to use:
 1. import the database.sql in server/database/ to your local database driver
 2. Change src/config.json database details to match your own
-3. enter the server directory `cd server` and run `npm install` to install the node modules for the server
-4. navigate back to the main directory `cd ../` and run `npm install` to install the node modules for the application
-5. run `npm start` this will run both the server and the react app
+4. install [this](https://chrome.google.com/webstore/detail/allow-cors-access-control/lhobafahddgcelffkeicbaginigeejlf?hl=en) plugin on google chrome to allow local cross origin requests
+5. enter the server directory `cd server` and run `npm install` to install the node modules for the server
+6. navigate back to the main directory `cd ../` and run `npm install` to install the node modules for the application
+7. run `npm start` this will run both the server and the react app
 
 ## Tools
 
