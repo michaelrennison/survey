@@ -18,8 +18,10 @@
     "typescript": "^4.0.2"
   },
   "scripts": {
+    "initialize": "npm run clientinstall && npm run serverinstall",
     "client": "react-scripts start",
     "clientinstall": "npm install --prefix client",
+    "serverinstall": "cd server && npm install && cd ../",
     "dev": "concurrently \"npm run server\" \"npm run client",
     "start": "\"concurrently \"npm run server\" \"npm run client\"",
     "build": "react-scripts build",
