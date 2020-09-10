@@ -10,7 +10,8 @@ class Survey extends Component {
         title: 'Calculate your personal score',
         description: 'Next we have a short 2-3 minute survey covering Diet, Home, Travel and Other that will let us calculate your personal carbon footprint',
         buttonText: 'Take the survey',
-        categories: []
+        categories: [],
+        questionsCount: 0
     }
 
     constructor(props) {
@@ -30,7 +31,7 @@ class Survey extends Component {
     render() {
         return (
             <div className="p-5">
-                <img src="./assets/image.png" />
+                <img className="mb-3" src="./assets/image.png" />
                 <h5 className="text-center font-weight-bold">{this.state.title}</h5>
                 <p className="text-center">{this.state.description}</p>
                 {this.hasCategories()}

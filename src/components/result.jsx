@@ -48,8 +48,8 @@ class Result extends Component {
             let styleHtml = `.progress-bar { background-color: ${this.state.category.themeColour} }`;
             return  <React.Fragment>
                 <div className="text-center text-white pb-1" style={{ background: this.state.category.themeColour }}>
-                    <h1 className="mb-0 pt-3">{this.state.category.name}</h1>
-                    <p>Your score</p>
+                    <h1 className="mb-0 pt-4 font-weight-bold large-title">{this.state.category.name}</h1>
+                    <p className="mb-1">Your score</p>
                 </div>
                 <div className="p-5 text-center">
                     <div className="mb-3">
@@ -110,8 +110,8 @@ class Result extends Component {
                     applied: true
                 }
             };
-            return <div className="text-center p-5">
-                <p className="font-weight-bold">Lets see how you do in the <span className="font-weight-bold" style={{ color: this.state.nextCategory.themeColour}}>{this.state.nextCategory.name}</span> category...</p>
+            return <div className="text-center p-5 bg-white next-cat">
+                <p className="font-weight-bold">Lets see how you do in the <span className="font-weight-bold font-italic" style={{ color: this.state.nextCategory.themeColour}}>{this.state.nextCategory.name}</span> category...</p>
                 <Link onClick={this.handleChange} to={linkTarget} className="btn-primary btn btn-block">Continue</Link>
             </div>;
         } else {

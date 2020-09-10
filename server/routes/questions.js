@@ -20,4 +20,22 @@ module.exports = function(app) {
             res.status(200).send(qustion);
         }
     });
+
+    app.get('/questions-count/', async function(req, res) {
+        // define the query to execute
+        const query = `SELECT COUNT(*) AS 'count' FROM questions `
+        // execute the query for getting all of the questions
+        const qustion = await mysql.executeQuery(query).then((d) => {
+            return d[0];
+        }).catch(e => {
+            return e
+        });
+
+        if(qustion instanceof Error) {
+            res.status(500).send(qustion);
+        } else {
+            res.status(200).send(qustion);
+        }
+    });
+
 }

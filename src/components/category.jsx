@@ -27,9 +27,12 @@ class Category extends Component {
             activeCategory: null,
             answerSelected: false,
             showResults: false,
+            questionCount: 0,
+            currentQuestionIndex: 1
         }
         this.handler = this.handler.bind(this)
         this.state.id = this.props.match.params.categoryId;
+        this.getQuestionCount();
         this.initialize()
     }
 
@@ -65,10 +68,19 @@ class Category extends Component {
             console.log(this.state.categories)
             return <div className="p-5">
                 {this.checkForCategories()}
+                {this.checkForQuestionCount()}
                 {this.displayActiveQuestion()}
             </div>
         } else {
             return <Result handler = { this.handler } total={this.state.total} categoryId={this.state.id} />
+        }
+    }
+
+    checkForQuestionCount() {
+        if(this.state.questionCount > 0) {
+            return <div className="mb-3 mt-1">
+                <span className="question-index">Question {this.state.currentQuestionIndex} of {this.state.questionCount}</span>
+            </div>
         }
     }
 
@@ -169,6 +181,9 @@ class Category extends Component {
     }
 
     nextQuestion = () => {
+        const qIndex = this.state.currentQuestionIndex + 1;
+        this.setState({currentQuestionIndex: qIndex})
+
         // add the value of the selected answer to the total
         for(let i = 0; i < this.state.activeQuestion.answers.length; i++) {
             if(this.state.activeQuestion.answers[i].selected) {
@@ -246,6 +261,13 @@ class Category extends Component {
             if(item.id == this.state.id) {
                 this.setState({activeCategory: item});
             }
+        });
+    }
+
+    getQuestionCount() {
+        // get the number of questions from the server
+        axios.get(`${config.server}/questions-count/`).then(resp => {
+            this.setState({questionCount: resp.data.count});
         });
     }
 }
