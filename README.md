@@ -3,8 +3,9 @@
 How to use:
 1. import the database.sql in server/database/ to your local database driver
 2. Change src/config.json database details to match your own
-3. run `npm install` to install the applications required dependencies
-4. run `npm start` this will run both the server and the react app
+3. Install concurrently on your machine using `npm install -g concurrently`
+4. run `npm initialize` to install the applications required dependencies
+5. run `npm start` this will run both the server and the react app
 
 ## Tools
 
