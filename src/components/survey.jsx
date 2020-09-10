@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import CategoryModel from "../models/category";
 import axios from 'axios';
 import { Router, Link } from "react-router-dom";
+import { getSiteOptions } from '../helpers/globals';
 
 const config = require('../config.json');
 class Survey extends Component {
@@ -16,6 +17,15 @@ class Survey extends Component {
         super(props);
         // call the function to retrieve the categories from the backend
         this.getCategories();
+        getSiteOptions('home_title').then((value) => {
+            this.setState({title: value});
+        })
+        getSiteOptions('home_description').then((value) => {
+            this.setState({description: value})
+        })
+        getSiteOptions('home_button_text').then((value) => {
+            this.setState({buttonText: value})
+        })
     }
     render() {
         return (

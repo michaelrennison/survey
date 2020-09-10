@@ -6,10 +6,10 @@ module.exports = function(app) {
         // get the category id from the url
         const key = req.params.key;
         // define the query to execute
-        const query = `SELECT * FROM site_options WHERE key='${key}'`
+        const query = `SELECT value FROM \`site_options\` WHERE \`key\`='${key}'`;
         // execute the query for getting all of the questions
         const option = await mysql.executeQuery(query).then((d) => {
-            return d;
+            return d[0];
         }).catch(e => {
             return e
         });

@@ -6,6 +6,8 @@ const port = 3000
 require('./routes/categories')(app);
 // require routes related to questions
 require('./routes/questions')(app);
+// require routes related to site options
+require('./routes/options')(app);
 // Connect to the database
 
 mysqllib.connect().then(() => {
