@@ -1,7 +1,7 @@
 const express = require('express')
 const mysqllib = require('./db_connection')
 const app = express()
-const port = 3000
+const port = 3001
 // require routes related to categories
 require('./routes/categories')(app);
 // require routes related to questions
@@ -12,7 +12,7 @@ require('./routes/options')(app);
 
 mysqllib.connect().then(() => {
     app.listen(port, () => {
-        console.log(`Example app listening at http://localhost:${port}`)
+        // console.log(`Example app listening at http://localhost:${port}`)
     })
 }).catch(err => {
     console.log('connection error');

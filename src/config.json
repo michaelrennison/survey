@@ -1,3 +1,7 @@
 {
-  "server": "http://localhost:3000"
+  "server": "http://localhost:3001",
+  "dbhost": "localhost",
+  "dbuser": "root",
+  "dbpass": "",
+  "dbname": "survey"
 }
